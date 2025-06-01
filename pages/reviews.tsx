@@ -1,73 +1,57 @@
-import { useState } from "react";
+import { useState } from 'react';
+import ReviewCard from '@/components/ReviewCard';
 
-export default function Reviews() {
-  const [name, setName] = useState("");
-  const [rating, setRating] = useState("5");
-  const [comment, setComment] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+export default function ReviewsPage() {
+  const [showForm, setShowForm] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    // For now, just show a thank you message
-    setSubmitted(true);
-    setName("");
-    setRating("5");
-    setComment("");
-  }
+  // Replace this later with real reviews from a backend or JSON file
+  const reviews = [];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Reviews</h1>
+    <div className="max-w-3xl mx-auto px-4 py-12">
+      <h1 className="text-3xl font-bold mb-6 text-center">Customer Reviews</h1>
 
-      {submitted ? (
-        <p>Thanks for your review!</p>
+      {reviews.length === 0 ? (
+        <div className="text-center text-gray-500 mb-6">No reviews yet. Be the first to leave one!</div>
       ) : (
-        <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }}>
-          <div style={{ marginBottom: "10px" }}>
-            <label>
-              Name:<br />
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                style={{ width: "100%" }}
-              />
-            </label>
-          </div>
+        <div className="space-y-4 mb-8">
+          {reviews.map((r, i) => (
+            <ReviewCard key={i} {...r} />
+          ))}
+        </div>
+      )}
 
-          <div style={{ marginBottom: "10px" }}>
-            <label>
-              Rating:<br />
-              <select
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
-                required
-                style={{ width: "100%" }}
-              >
-                <option value="5">5 - Excellent</option>
-                <option value="4">4 - Good</option>
-                <option value="3">3 - Okay</option>
-                <option value="2">2 - Poor</option>
-                <option value="1">1 - Bad</option>
-              </select>
-            </label>
-          </div>
+      <div className="text-center">
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800 transition"
+        >
+          {showForm ? 'Cancel' : 'Leave a Review'}
+        </button>
+      </div>
 
-          <div style={{ marginBottom: "10px" }}>
-            <label>
-              Comment:<br />
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                required
-                rows={4}
-                style={{ width: "100%" }}
-              />
-            </label>
-          </div>
-
-          <button type="submit">Submit Review</button>
+      {showForm && (
+        <form className="mt-8 space-y-4">
+          <input
+            type="text"
+            placeholder="Name"
+            className="w-full border px-4 py-2 rounded-xl"
+          />
+          <select className="w-full border px-4 py-2 rounded-xl">
+            <option value="">Rating</option>
+            {[5, 4, 3, 2, 1].map((v) => (
+              <option key={v} value={v}>
+                {v} - {['Excellent', 'Good', 'Okay', 'Poor', 'Awful'][5 - v]}
+              </option>
+            ))}
+          </select>
+          <textarea
+            placeholder="Comment"
+            className="w-full border px-4 py-2 rounded-xl"
+          ></textarea>
+          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700">
+            Submit Review
+          </button>
         </form>
       )}
     </div>
