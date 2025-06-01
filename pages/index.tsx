@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
