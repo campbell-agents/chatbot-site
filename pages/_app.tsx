@@ -2,11 +2,26 @@ import type { AppProps } from "next/app";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 
+function generateId() {
+  return Math.random().toString(36).substring(2, 10);
+}
+
 export default function App({ Component, pageProps }: AppProps) {
+  const [userId, setUserId] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Generate or load userId once
+  useEffect(() => {
+    let id = localStorage.getItem("chatUserId");
+    if (!id) {
+      id = generateId();
+      localStorage.setItem("chatUserId", id);
+    }
+    setUserId(id);
+  }, []);
 
   // Auto scroll to latest message
   useEffect(() => {
@@ -20,24 +35,25 @@ export default function App({ Component, pageProps }: AppProps) {
     setInput("");
 
     try {
-      const res = await fetch(
-        "https://campbell05.app.n8n.cloud/webhook/3199d7cb-de70-49aa-b81e-95921d60ddc3/chat",
+const res = await fetch("https://campbell05.app.n8n.cloud/webhook/0e5926ff-cc7f-40ba-91b4-4a3e86752d1a/chat"
+,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: userMsg }),
+body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
         }
       );
-     const botJson = await res.json();
 
-// Check if the response is an array (a list), if yes get first item's output
-const cleanText = Array.isArray(botJson) && botJson.length > 0 && botJson[0].output
-  ? botJson[0].output.replace(/\\n/g, "\n")
-  : botJson.output
-  ? botJson.output.replace(/\\n/g, "\n")
-  : "No response from bot.";
+      const botJson = await res.json();
 
-setMessages((prev) => [...prev, "Bot: " + cleanText]);
+      const cleanText =
+        Array.isArray(botJson) && botJson.length > 0 && botJson[0].output
+          ? botJson[0].output.replace(/\\n/g, "\n")
+          : botJson.output
+          ? botJson.output.replace(/\\n/g, "\n")
+          : "No response from bot.";
+
+      setMessages((prev) => [...prev, "Bot: " + cleanText]);
     } catch {
       setMessages((prev) => [...prev, "Bot: (Error)"]);
     }
