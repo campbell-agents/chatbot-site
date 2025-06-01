@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -11,9 +11,9 @@ export default function HomePage() {
         <p className="text-lg text-gray-600 max-w-xl mb-6">
           Professional websites and custom AI chatbots designed for small businesses. Clean, fast, and effective.
         </p>
-        <Button className="text-lg px-6 py-3 rounded-2xl shadow-md">
+        <button className="text-lg px-6 py-3 rounded-2xl shadow-md bg-black text-white">
           Get Started
-        </Button>
+        </button>
       </section>
 
       {/* Features Section */}
@@ -39,7 +39,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-10 px-4 text-center text-sm text-gray-500">
-<span>{String.fromCharCode(169)} {new Date().getFullYear()} CampbellVirtual. All rights reserved.</span>
+        CampbellVirtual. All rights reserved.
       </footer>
     </main>
   );
