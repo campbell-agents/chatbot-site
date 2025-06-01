@@ -1,3 +1,5 @@
+import "@/styles/globals.css"; // MUST be first to apply Tailwind
+
 import type { AppProps } from "next/app";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
@@ -13,7 +15,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const [messages, setMessages] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Generate or load userId once
   useEffect(() => {
     let id = localStorage.getItem("chatUserId");
     if (!id) {
@@ -23,7 +24,6 @@ export default function App({ Component, pageProps }: AppProps) {
     setUserId(id);
   }, []);
 
-  // Auto scroll to latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -35,17 +35,16 @@ export default function App({ Component, pageProps }: AppProps) {
     setInput("");
 
     try {
-const res = await fetch("https://campbell05.app.n8n.cloud/webhook/ff370f0f-663b-41eb-9edd-dabb844716bf/chat"
-,
+      const res = await fetch(
+        "https://campbell05.app.n8n.cloud/webhook/ff370f0f-663b-41eb-9edd-dabb844716bf/chat",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
+          body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
         }
       );
 
       const botJson = await res.json();
-
       const cleanText =
         Array.isArray(botJson) && botJson.length > 0 && botJson[0].output
           ? botJson[0].output.replace(/\\n/g, "\n")
@@ -61,74 +60,53 @@ body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
 
   return (
     <>
-      <nav style={{ padding: "10px", backgroundColor: "#333", color: "#fff" }}>
-        <Link href="/" style={{ marginRight: "15px", color: "#fff", textDecoration: "none" }}>
-          Home
-        </Link>
-        <Link href="/about" style={{ marginRight: "15px", color: "#fff", textDecoration: "none" }}>
-          About
-        </Link>
-        <Link href="/reviews" style={{ color: "#fff", textDecoration: "none" }}>
-          Reviews
-        </Link>
+      <nav className="p-4 bg-black text-white text-sm flex gap-6">
+        <Link href="/">Home</Link>
+        <Link href="/about">About</Link>
+        <Link href="/reviews">Reviews</Link>
       </nav>
 
       {/* Chat Widget */}
-      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
+      <div className="fixed bottom-5 right-5 z-50">
         {!open ? (
           <button
             onClick={() => setOpen(true)}
-            style={{
-              borderRadius: "50%",
-              width: 60,
-              height: 60,
-              backgroundColor: "#333",
-              color: "white",
-              fontSize: 20,
-              border: "none",
-              cursor: "pointer",
-            }}
+            className="w-[60px] h-[60px] rounded-full bg-black text-white text-xl"
             aria-label="Open chat"
           >
             💬
           </button>
         ) : (
-          <div
-            style={{
-              width: 300,
-              height: 400,
-              backgroundColor: "#fff",
-              boxShadow: "0 0 10px rgba(0,0,0,0.3)",
-              borderRadius: 10,
-              padding: 10,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ flex: 1, overflowY: "auto", marginBottom: 10 }}>
+          <div className="w-[300px] h-[400px] bg-white rounded-xl shadow-xl flex flex-col justify-between p-3">
+            <div className="flex-1 overflow-y-auto mb-2">
               {messages.map((msg, i) => (
-                <div key={i} style={{ marginBottom: 5, whiteSpace: "pre-wrap" }}>
+                <div key={i} className="mb-1 whitespace-pre-wrap">
                   {msg}
                 </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
 
-            <div style={{ display: "flex" }}>
+            <div className="flex">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
-                style={{ flex: 1, padding: 5, borderRadius: 5, border: "1px solid #ccc" }}
+                className="flex-1 px-2 py-1 rounded border border-gray-300"
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               />
-              <button onClick={sendMessage} style={{ marginLeft: 5 }}>
+              <button
+                onClick={sendMessage}
+                className="ml-2 bg-black text-white px-3 py-1 rounded"
+              >
                 Send
               </button>
             </div>
 
-            <button onClick={() => setOpen(false)} style={{ marginTop: 5, alignSelf: "flex-end" }}>
+            <button
+              onClick={() => setOpen(false)}
+              className="mt-2 text-right text-xs text-gray-500 underline"
+            >
               Close
             </button>
           </div>
