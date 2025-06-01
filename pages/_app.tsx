@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
     setInput("");
 
     try {
-const res = await fetch("https://campbell05.app.n8n.cloud/webhook/0e5926ff-cc7f-40ba-91b4-4a3e86752d1a/chat"
+const res = await fetch("https://campbell05.app.n8n.cloud/webhook/ff370f0f-663b-41eb-9edd-dabb844716bf/chat"
 ,
         {
           method: "POST",
