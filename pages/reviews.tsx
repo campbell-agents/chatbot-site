@@ -5,7 +5,9 @@ export default function ReviewsPage() {
   const [showForm, setShowForm] = useState(false);
 
   // Replace this later with real reviews from a backend or JSON file
-  const reviews = [];
+const reviews: { name: string; content: string }[] = [
+  { name: "John D.", content: "Very helpful service, would recommend." },
+];
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
