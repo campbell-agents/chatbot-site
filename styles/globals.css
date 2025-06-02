@@ -21,12 +21,14 @@ body {
 }
 
 body {
+  @apply text-base text-zinc-900 dark:text-white bg-white dark:bg-zinc-900;
+  font-family: inherit;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 * {
   box-sizing: border-box;
   padding: 0;
