@@ -80,7 +80,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <div className="w-[300px] h-[400px] bg-white rounded-xl shadow-xl flex flex-col justify-between p-3">
             <div className="flex-1 overflow-y-auto mb-2">
               {messages.map((msg, i) => (
-                <div key={i} className="mb-1 whitespace-pre-wrap">
+                <div key={i} className="mb-1 whitespace-pre-wrap text-black">
                   {msg}
                 </div>
               ))}
