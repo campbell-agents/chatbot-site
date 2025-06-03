@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     try {
       const res = await fetch(
-        "https://campbell05.app.n8n.cloud/webhook/ff370f0f-663b-41eb-9edd-dabb844716bf/chat",
+        "/api/chat",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
