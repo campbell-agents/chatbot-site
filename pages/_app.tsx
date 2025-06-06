@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
+        body: JSON.stringify({ chatInput: userMsg, session_id: userId }),
       });
 
       const botJson = await res.json();
