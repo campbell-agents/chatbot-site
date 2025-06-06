@@ -1,4 +1,6 @@
+// pages/index.tsx
 import React from "react";
+import Link from 'next/link';
 
 export default function HomePage() {
   return (
@@ -9,11 +11,13 @@ export default function HomePage() {
           Welcome to the New CampbellVirtual
         </h1>
         <p className="text-lg text-gray-600 max-w-xl mb-6">
-          Professional websites and custom AI chatbots designed for small businesses. Clean, fast, and effective.
+          Custom Virtual Agents designed for you. Clean, fast, and effective.
         </p>
-        <button className="text-lg px-6 py-3 rounded-2xl shadow-md bg-black text-white">
-          Get Started
-        </button>
+        <Link href="/chat">
+          <a className="text-lg px-6 py-3 rounded-2xl shadow-md bg-black text-white">
+            Get Started
+          </a>
+        </Link>
       </section>
 
       {/* Features Section */}
@@ -22,12 +26,10 @@ export default function HomePage() {
           <h2 className="text-3xl font-medium mb-12">What We Offer</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-6 bg-white rounded-2xl shadow">
-              <h3 className="text-xl font-semibold mb-2">Modern Web Design</h3>
-              <p className="text-gray-600">Responsive, aesthetic, and built with best practices in mind.</p>
             </div>
             <div className="p-6 bg-white rounded-2xl shadow">
-              <h3 className="text-xl font-semibold mb-2">Custom AI Chatbots</h3>
-              <p className="text-gray-600">Integrated AI that actually helps your customers, not frustrates them.</p>
+              <h3 className="text-xl font-semibold mb-2">Virtual Agents</h3>
+              <p className="text-gray-600">AI Agents that integrate with your business and needs</p>
             </div>
             <div className="p-6 bg-white rounded-2xl shadow">
               <h3 className="text-xl font-semibold mb-2">Ongoing Support</h3>
@@ -43,4 +45,3 @@ export default function HomePage() {
       </footer>
     </main>
   );
-}

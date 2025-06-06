@@ -8,17 +8,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { chatInput, sessionId: incomingId } = req.body;
-    const sessionId = incomingId || generateSessionId();  // Use existing or create new
-
-    const response = await fetch("https://campbell05.app.n8n.cloud/webhook/ff370f0f-663b-41eb-9edd-dabb844716bf/chat", {
+    const { chatInput, sessionId: incomingId } = req.body;           // <—
+    const sessionId = incomingId || generateSessionId();             // <—
+    const response = await fetch("https://…/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chatInput, sessionId }),
+      body: JSON.stringify({ chatInput, sessionId }),                // <—
     });
 
     const data = await response.json();
-    res.status(200).json({ ...data, sessionId });  // Return sessionId for client to reuse
+    res.status(200).json({ ...data, sessionId });                   // <—
   } catch {
     res.status(500).json({ error: "Internal Server Error" });
   }
