@@ -16,13 +16,10 @@ export default function App({ Component, pageProps }: AppProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let id = localStorage.getItem("chatUserId");
-    if (!id) {
-      id = generateId();
-      localStorage.setItem("chatUserId", id);
-    }
-    setUserId(id);
-  }, []);
+    if (!open) return;
+    const freshId = generateId();
+    setUserId(freshId);
+  }, [open]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -35,14 +32,11 @@ export default function App({ Component, pageProps }: AppProps) {
     setInput("");
 
     try {
-      const res = await fetch(
-        "/api/chat",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
-        }
-      );
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chatInput: userMsg, sessionId: userId }),
+      });
 
       const botJson = await res.json();
       const cleanText =
