@@ -15,12 +15,18 @@ export default function App({ Component, pageProps }: AppProps) {
   const [messages, setMessages] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Initialize a stable session ID once per tab
   useEffect(() => {
-    if (!open) return;
-    const freshId = generateId();
-    setUserId(freshId);
-  }, [open]);
+    const STORAGE_KEY = 'chat-session-id';
+    let id = sessionStorage.getItem(STORAGE_KEY);
+    if (!id) {
+      id = generateId();
+      sessionStorage.setItem(STORAGE_KEY, id);
+    }
+    setUserId(id);
+  }, []);
 
+  // Auto-scroll on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -28,7 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const sendMessage = async () => {
     if (!input) return;
     const userMsg = input;
-    setMessages((prev) => [...prev, "You: " + userMsg]);
+    setMessages(prev => [...prev, "You: " + userMsg]);
     setInput("");
 
     try {
@@ -46,9 +52,9 @@ export default function App({ Component, pageProps }: AppProps) {
           ? botJson.output.replace(/\\n/g, "\n")
           : "No response from bot.";
 
-      setMessages((prev) => [...prev, "Bot: " + cleanText]);
+      setMessages(prev => [...prev, "Bot: " + cleanText]);
     } catch {
-      setMessages((prev) => [...prev, "Bot: (Error)"]);
+      setMessages(prev => [...prev, "Bot: (Error)"]);
     }
   };
 
@@ -84,10 +90,10 @@ export default function App({ Component, pageProps }: AppProps) {
             <div className="flex">
               <input
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={e => setInput(e.target.value)}
                 placeholder="Type a message..."
                 className="flex-1 px-2 py-1 rounded border border-gray-300"
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                onKeyDown={e => e.key === "Enter" && sendMessage()}
               />
               <button
                 onClick={sendMessage}
