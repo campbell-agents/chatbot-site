@@ -1,3 +1,4 @@
+// pages/_app.tsx
 import "@/styles/globals.css"; // MUST be first to apply Tailwind
 
 import type { AppProps } from "next/app";
@@ -17,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   // Initialize a stable session ID once per tab
   useEffect(() => {
-    const STORAGE_KEY = 'chat-session-id';
+    const STORAGE_KEY = "chat-session-id";
     let id = sessionStorage.getItem(STORAGE_KEY);
     if (!id) {
       id = generateId();
@@ -34,14 +35,17 @@ export default function App({ Component, pageProps }: AppProps) {
   const sendMessage = async () => {
     if (!input) return;
     const userMsg = input;
-    setMessages(prev => [...prev, "You: " + userMsg]);
+    setMessages((prev) => [...prev, "You: " + userMsg]);
     setInput("");
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatInput: userMsg, session_id: userId }),
+        body: JSON.stringify({
+          chatInput: userMsg,
+          sessionId: userId,    // ← corrected key here
+        }),
       });
 
       const botJson = await res.json();
@@ -52,9 +56,9 @@ export default function App({ Component, pageProps }: AppProps) {
           ? botJson.output.replace(/\\n/g, "\n")
           : "No response from bot.";
 
-      setMessages(prev => [...prev, "Bot: " + cleanText]);
+      setMessages((prev) => [...prev, "Bot: " + cleanText]);
     } catch {
-      setMessages(prev => [...prev, "Bot: (Error)"]);
+      setMessages((prev) => [...prev, "Bot: (Error)"]);
     }
   };
 
@@ -90,10 +94,10 @@ export default function App({ Component, pageProps }: AppProps) {
             <div className="flex">
               <input
                 value={input}
-                onChange={e => setInput(e.target.value)}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a message..."
                 className="flex-1 px-2 py-1 rounded border border-gray-300"
-                onKeyDown={e => e.key === "Enter" && sendMessage()}
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               />
               <button
                 onClick={sendMessage}
