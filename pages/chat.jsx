@@ -7,7 +7,7 @@ export default function Chat() {
     const script = document.createElement('script')
     // <-- only this src, no local stub
     script.src =
-      'https://campbell05.app.n8n.cloud/webhook/ce0eb04f-72fa-4669-b003-9ed24b237730/chat/sdk.js'
+      'https://campbell05.app.n8n.cloud/webhook/ce0eb04f-72fa-4669-b003-9ed24b237730/chat'
     script.async = true
     script.onload = () => {
       const savedSessionId = sessionStorage.getItem('chat-session-id')
