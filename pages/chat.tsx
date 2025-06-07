@@ -16,7 +16,7 @@ export default function Chat() {
       // Pull any saved session ID from sessionStorage
       const saved = sessionStorage.getItem('chat-session-id') || undefined;
 
-      // @ts-ignore: injected by the SDK
+      // @ts-expect-error: injected by the SDK
       const chat = window.N8NChat.init({
         selector: '#n8n-chat',
         sessionId: saved,
