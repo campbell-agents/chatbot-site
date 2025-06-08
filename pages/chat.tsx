@@ -17,7 +17,6 @@ export default function Chat() {
         setSessionCookie(sessionId);
       }
 
-      // @ts-expect-error
       window.N8NChat.init({
         selector: '#n8n-chat',
         sessionId,
