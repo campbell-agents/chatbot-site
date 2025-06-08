@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Theme Variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -18,15 +19,15 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-}
-
-body {
-  @apply text-base text-zinc-900 dark:text-white bg-white dark:bg-zinc-900;
   font-family: inherit;
   color: var(--foreground);
   background: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply text-base text-zinc-900 dark:text-white bg-white dark:bg-zinc-900;
 }
 
 * {
