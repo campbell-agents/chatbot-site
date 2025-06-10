@@ -1,77 +1,50 @@
-// pages/index.tsx
-import { useEffect } from "react";
-import { getSessionCookie, setSessionCookie, generateId } from "../utils/cookies";
-
-// Ensure TypeScript knows about N8NChat on the Window object
-declare global {
-  interface Window {
-    N8NChat?: {
-      init: (options: { selector: string; sessionId: string }) => void;
-    };
-  }
-}
-
-export default function HomePage() {
-  useEffect(() => {
-    const sessionId = getSessionCookie() || generateId();
-    setSessionCookie(sessionId);
-
-    const script = document.createElement("script");
-    script.src = "/chat-sdk.js"; // chat-sdk.js must exist in /public
-    script.async = true;
-    script.onload = () => {
-      // Wait for the global to load before calling init
-      if (window.N8NChat) {
-        window.N8NChat.init({
-          selector: "#chat-container",
-          sessionId,
-        });
-      } else {
-        console.error("N8NChat failed to load.");
-      }
-    };
-
-    document.body.appendChild(script);
-  }, []);
-
+export default function Home() {
   return (
-    <div>
-      <section className="text-center py-16">
-        <h1 className="text-4xl font-bold">Welcome to Campbell Virtual</h1>
-        <p className="mt-2 text-lg text-gray-600">
+    <>
+      {/* NAVBAR */}
+      <header className="w-full bg-white/80 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 px-6 py-4 sticky top-0 z-50">
+        <nav className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="text-xl font-bold text-zinc-900 dark:text-white">
+            Campbell Virtual
+          </div>
+          <ul className="flex gap-6 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            <li><a href="/">Home</a></li>
+            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#info">More Info</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      {/* HERO */}
+      <section className="flex flex-col items-center justify-center text-center px-4 py-28 bg-white dark:bg-zinc-900">
+        <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
+          Welcome to Campbell Virtual
+        </h1>
+        <p className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-300 max-w-2xl">
           Custom virtual agents built to fit your needs.
         </p>
-        <button className="mt-6 px-6 py-2 bg-black text-white rounded">
-          Get Started
-        </button>
       </section>
 
-      <section className="py-12 bg-gray-50">
-        <h2 className="text-center text-2xl font-semibold mb-8">What We Offer</h2>
-        <div className="flex justify-center gap-6 flex-wrap max-w-5xl mx-auto">
-          <div className="bg-white rounded-lg p-6 shadow w-72">
-            <h3 className="font-bold mb-2">Custom AI Integrations</h3>
-            <p className="text-sm text-gray-700">
-              Seamless AI workflows that connect your tools and data for smarter automation.
-            </p>
+      {/* WHAT WE OFFER */}
+      <section className="px-4 py-16 bg-zinc-50 dark:bg-zinc-950">
+        <h2 className="text-center text-2xl font-semibold text-zinc-800 dark:text-white mb-10">
+          What We Offer
+        </h2>
+
+        <div className="flex flex-wrap justify-center gap-6">
+          <div className="w-[300px] rounded-xl p-6 backdrop-blur-lg bg-white/70 text-zinc-900 shadow-md border border-zinc-200 dark:bg-white/5 dark:text-zinc-100 dark:shadow-lg dark:shadow-black/30 dark:border-white/10 transition-all duration-300">
+            Seamless AI workflows that connect your tools and data for smarter automation.
           </div>
-          <div className="bg-white rounded-lg p-6 shadow w-72">
-            <h3 className="font-bold mb-2">Virtual Agents</h3>
-            <p className="text-sm text-gray-700">
-              AI-powered chatbots tailored to your unique customer needs and branding.
-            </p>
+          <div className="w-[300px] rounded-xl p-6 backdrop-blur-lg bg-white/70 text-zinc-900 shadow-md border border-zinc-200 dark:bg-white/5 dark:text-zinc-100 dark:shadow-lg dark:shadow-black/30 dark:border-white/10 transition-all duration-300">
+            Virtual agents tailored to your unique customer needs and branding.
           </div>
-          <div className="bg-white rounded-lg p-6 shadow w-72">
-            <h3 className="font-bold mb-2">Ongoing Support</h3>
-            <p className="text-sm text-gray-700">
-              Continuous maintenance and updates to keep your AI agents performing at their best.
-            </p>
+          <div className="w-[300px] rounded-xl p-6 backdrop-blur-lg bg-white/70 text-zinc-900 shadow-md border border-zinc-200 dark:bg-white/5 dark:text-zinc-100 dark:shadow-lg dark:shadow-black/30 dark:border-white/10 transition-all duration-300">
+            Continuous maintenance and updates to keep your agents performing at their best.
           </div>
         </div>
       </section>
-
-      {/* Chat will attach to this div */}
-      <div id="chat-container" />
-    </div>
+    </>
   );
 }
