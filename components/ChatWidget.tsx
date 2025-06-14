@@ -12,6 +12,7 @@ export default function ChatWidget() {
   const messagesRef = useRef<HTMLDivElement>(null);
   const sessionIdRef = useRef<string | null>(null);
 
+  // generate or retrieve session ID once
   useEffect(() => {
     let id = sessionIdRef.current;
     if (!id) {
@@ -20,6 +21,19 @@ export default function ChatWidget() {
     }
   }, []);
 
+  // seed initial bot greeting when widget opens
+  useEffect(() => {
+    if (open && messages.length === 0) {
+      setMessages([
+        {
+          from: 'Bot' as Sender,
+          text: 'Hi there! I’m your Virtual Agent—how can I help you today?'
+        }
+      ]);
+    }
+  }, [open, messages.length]);
+
+  // auto-scroll on new messages or when opening
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -30,20 +44,26 @@ export default function ChatWidget() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const newMessages = [...messages, { from: 'You' as Sender, text: input }];
+    const newMessages: ChatMessage[] = [
+      ...messages,
+      { from: 'You' as Sender, text: input }
+    ];
     setMessages(newMessages);
     setInput('');
 
     try {
-      const res = await fetch('https://campbell05.app.n8n.cloud/webhook/ce0eb04f-72fa-4669-b003-9ed24b237730/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'sendMessage',
-          sessionId: sessionIdRef.current,
-          chatInput: input,
-        }),
-      });
+      const res = await fetch(
+        'https://campbell05.app.n8n.cloud/webhook/ce0eb04f-72fa-4669-b003-9ed24b237730/chat',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'sendMessage',
+            sessionId: sessionIdRef.current,
+            chatInput: input
+          })
+        }
+      );
 
       const raw = await res.text();
       let parsed = raw.trim();
@@ -51,13 +71,17 @@ export default function ChatWidget() {
       try {
         const json = JSON.parse(parsed);
         parsed = typeof json.output === 'string' ? json.output : parsed;
-      } catch {
-        // use raw as-is
-      }
+      } catch {}
 
-      setMessages([...newMessages, { from: 'Bot' as Sender, text: parsed }]);
+      setMessages([
+        ...newMessages,
+        { from: 'Bot' as Sender, text: parsed }
+      ]);
     } catch {
-      setMessages([...newMessages, { from: 'Bot' as Sender, text: 'Error reaching server.' }]);
+      setMessages([
+        ...newMessages,
+        { from: 'Bot' as Sender, text: 'Error reaching server.' }
+      ]);
     }
   };
 
